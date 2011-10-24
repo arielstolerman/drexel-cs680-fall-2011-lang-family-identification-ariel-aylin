@@ -1,5 +1,7 @@
 package main;
 
+import generics.*;
+
 public class Main {
 
 	/**
@@ -7,6 +9,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
+		// Executer executer = new Executer(ced, knownDocs, unknownDocs, wad);
 	}
 
 }
