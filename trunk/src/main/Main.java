@@ -41,7 +41,7 @@ public class Main {
 		};
 
 		// create documents
-		String corpusName = "drexel_1";
+		String corpusName = "drexel_1_short";
 		String corpusPath = "."+sep+"corpora"+sep+corpusName;
 
 		File corpus = new File(corpusPath);
@@ -62,9 +62,9 @@ public class Main {
 			}
 		}
 		
-		// ==============================
-		// create cumulative event driver
-		// ==============================
+		// =======================================================
+		// Create cumulative event driver for Koppel's feature set
+		// =======================================================
 		
 		CumulativeEventDriver ced = new CumulativeEventDriver();
 		
@@ -84,50 +84,11 @@ public class Main {
 		ec1.setParameter("numEvents", 50);
 		ced.addEventCuller(ec1, i);
 		
-		// #2 - word bigrams, ascii normalization, 250 most common events
-		EventDriver ed2 = new WordNGramEventDriver();
-		i = ced.addEventDriver(ed2);
-		
-		ced.addCanonicizer(c1, i);
-		
-		EventCuller ec2 = new MostCommonEvents();
-		ec2.setParameter("numEvents", 250);
-		ced.addEventCuller(ec2, i);
-		
-		// #3 - word lengths, ascii normalization, 10 least common events
-		EventDriver ed3 = new WordLengthEventDriver();
-		i = ced.addEventDriver(ed3);
-		
-		ced.addCanonicizer(c1, i);
-		
-		EventCuller ec3 = new LeastCommonEvents();
-		ec3.setParameter("numEvents", 10);
-		ced.addEventCuller(ec3, i);
-		
-		// #4 - POS trigrams, 150 most common events
-		EventDriver ed4 = new POSNGramEventDriver();
-		ed4.setParameter("N", 3);
-		i = ced.addEventDriver(ed4);
-		
-		EventCuller ec4 = new MostCommonEvents();
-		ec4.setParameter("numEvents", 150);
-		ced.addEventCuller(ec4, i);
-		
-		// #5 - experimental (change as will)
-		EventDriver ed5 = new LetterNGramEventDriver();
-		i = ced.addEventDriver(ed5);
-		
-		EventCuller ec5 = new MostCommonEvents();
-		ec5.setParameter("numEvents", 50);
-		ced.addEventCuller(ec5, i);
-		
 		// =============
 		// weka analyzer
 		// =============
 		
-		WekaAnalysisDriver wad = new WekaAnalysisDriver(new weka.classifiers.bayes.NaiveBayesMultinomial(),false);
-		//WekaAnalysisDriver wad = new WekaAnalysisDriver(new weka.classifiers.functions.LibSVM(),false);
-		//WekaAnalysisDriver wad = new WekaAnalysisDriver(new weka.classifiers.functions.MultilayerPerceptron(),false);
+		WekaAnalysisDriver wad = new WekaAnalysisDriver(new weka.classifiers.functions.LibSVM(),false);
 		
 		// =======
 		// execute
