@@ -68,27 +68,43 @@ public class Main {
 		
 		CumulativeEventDriver ced = new CumulativeEventDriver();
 		
+		Canonicizer normASCII = new NormalizeASCII();
+		Canonicizer unifyCase = new UnifyCase();
+		
+		int i;
+		
 		// add event drivers with canonicizers and event cullers
 		
-		// #1 - character bigrams, ascii normalization and unified case, 50 most common events 
-		EventDriver ed1 = new CharacterNGramEventDriver();
-		int i = ced.addEventDriver(ed1);
+		// 400 standard function words
+		EventDriver koppelFuncWords = new WhiteListEventDriver();
+		koppelFuncWords.setParameter("filename", "."+sep+"resources"+sep+"koppel_function_words.txt");
+		i = ced.addEventDriver(koppelFuncWords);
 		
-		Canonicizer c1 = new NormalizeASCII();
-		ced.addCanonicizer(c1, i);
+		ced.addCanonicizer(normASCII, i);
+		ced.addCanonicizer(unifyCase, i);
+				
+		EventCuller funcWordsCuller = new MostCommonEvents();
+		funcWordsCuller.setParameter("numEvents", 400);
+		//ced.addEventCuller(funcWordsCuller, i);
 		
-		Canonicizer c2 = new UnifyCase();
-		ced.addCanonicizer(c2, i);
+		// 200 letter trigrams
+		EventDriver letterTrigrams = new LetterNGramEventDriver();
+		letterTrigrams.setParameter("N", 3);
+		i = ced.addEventDriver(letterTrigrams);
 		
-		EventCuller ec1 = new MostCommonEvents();
-		ec1.setParameter("numEvents", 50);
-		ced.addEventCuller(ec1, i);
+		ced.addCanonicizer(normASCII, i);
+		ced.addCanonicizer(unifyCase, i);
+		
+		EventCuller letterTrigramsCuller = new MostCommonEvents();
+		letterTrigramsCuller.setParameter("numEvents", 200);
+		//ced.addEventCuller(letterTrigramsCuller, i);
 		
 		// =============
 		// weka analyzer
 		// =============
 		
-		WekaAnalysisDriver wad = new WekaAnalysisDriver(new weka.classifiers.functions.LibSVM(),false);
+		//WekaAnalysisDriver wad = new WekaAnalysisDriver(new weka.classifiers.functions.LibSVM(),false);
+		WekaAnalysisDriver wad = new WekaAnalysisDriver(new weka.classifiers.bayes.NaiveBayesMultinomial(),false);
 		
 		// =======
 		// execute
