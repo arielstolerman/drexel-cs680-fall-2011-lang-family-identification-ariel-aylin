@@ -84,8 +84,8 @@ public class Main {
 		ced.addCanonicizer(unifyCase, i);
 				
 		EventCuller funcWordsCuller = new MostCommonEvents();
-		funcWordsCuller.setParameter("numEvents", 400);
-		//ced.addEventCuller(funcWordsCuller, i);
+		funcWordsCuller.setParameter("numEvents", 206);
+		ced.addEventCuller(funcWordsCuller, i);
 		
 		// 200 letter trigrams
 		EventDriver letterTrigrams = new LetterNGramEventDriver();
@@ -97,7 +97,7 @@ public class Main {
 		
 		EventCuller letterTrigramsCuller = new MostCommonEvents();
 		letterTrigramsCuller.setParameter("numEvents", 200);
-		//ced.addEventCuller(letterTrigramsCuller, i);
+		ced.addEventCuller(letterTrigramsCuller, i);
 		
 		// =============
 		// weka analyzer
